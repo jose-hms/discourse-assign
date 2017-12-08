@@ -1,0 +1,8 @@
+{{#if topic.assigned_to_user.username}}
+{{else}}
+  {{d-button class="assign"
+      icon="user-plus"
+      action="assign"
+      label="discourse_assign.assign_self.title"
+      title="discourse_assign.assign_self.help"}}
+{{/if}}

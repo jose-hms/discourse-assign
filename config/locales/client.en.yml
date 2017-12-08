@@ -15,6 +15,9 @@ en:
       assign:
         title: "Assign"
         help: "Assign Topic to User"
+      assign_self:
+        title: "Assign to Me"
+        help: "Quick assign a ticket to yourself"
       assign_modal:
         title: "Assign Topic"
         description: "Enter the username of the person you'd like to assign this topic"
