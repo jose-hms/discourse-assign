@@ -22,3 +22,4 @@ plugins:
     default: false
     client: true
   assign_mailer_enabled: false
+  assign_first_staff: false
