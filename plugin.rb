@@ -17,17 +17,12 @@ end
 after_initialize do
   require 'topic_assigner'
 
-  #Assign the first staff member who replies to the topic as the owner.
+  # Assign the first staff member who replies to the topic as the owner.
   DiscourseEvent.on(:post_created) do |post|
-    if SiteSetting.assign_first_staff?
-      topic = Topic.find_by(id: post.topic_id)
-      if topic.custom_fields['assigned_to_id'].nil?
-        original_poster = User.find_by(id: post.user_id)
-        if original_poster.staff?
-          assigner = TopicAssigner.new(topic, original_poster)
-          assigner.assign(original_poster)
-        end
-      end
+    topic = post.topic
+    poster = post.user
+    if SiteSetting.assign_first_staff? && topic.custom_fields['assigned_to_id'].nil? && post.post_type != 4 && poster.staff?
+      assigner = TopicAssigner.new(topic, poster).assign(poster)
     end
   end
 
