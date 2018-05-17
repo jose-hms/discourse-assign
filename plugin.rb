@@ -20,9 +20,12 @@ after_initialize do
   # Assign the first staff member who replies to the topic as the owner.
   DiscourseEvent.on(:post_created) do |post|
     topic = post.topic
-    poster = post.user
-    if SiteSetting.assign_first_staff? && topic.custom_fields['assigned_to_id'].nil? && post.post_type != 4 && poster.staff?
-      assigner = TopicAssigner.new(topic, poster).assign(poster)
+    @tracked_categories = SiteSetting.random_assign_tracked_categories.split('|')
+    if !@tracked_categories.include? topic.category.name
+      poster = post.user
+      if SiteSetting.assign_first_staff? && topic.custom_fields['assigned_to_id'].nil? && post.post_type != 4 && poster.staff?
+        assigner = TopicAssigner.new(topic, poster).assign(poster)
+      end
     end
   end
 
