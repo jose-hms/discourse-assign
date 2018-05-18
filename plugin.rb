@@ -21,10 +21,12 @@ after_initialize do
   DiscourseEvent.on(:post_created) do |post|
     topic = post.topic
     @tracked_categories = SiteSetting.random_assign_tracked_categories.split('|')
-    if !@tracked_categories.include? topic.category.name
-      poster = post.user
-      if SiteSetting.assign_first_staff? && topic.custom_fields['assigned_to_id'].nil? && post.post_type != 4 && poster.staff?
-        assigner = TopicAssigner.new(topic, poster).assign(poster)
+    if topic.archetype.to_s != "private_message"
+      if !@tracked_categories.include? topic.category.name
+        poster = post.user
+        if SiteSetting.assign_first_staff? && topic.custom_fields['assigned_to_id'].nil? && post.post_type != 4 && poster.staff?
+          assigner = TopicAssigner.new(topic, poster).assign(poster)
+        end
       end
     end
   end
